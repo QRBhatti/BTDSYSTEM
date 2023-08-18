@@ -1,0 +1,14 @@
+import tensorflow as tf
+from flask import Flask, flash, render_template, request,redirect, session,url_for,jsonify
+from flask_sqlalchemy import SQLAlchemy
+from flask_session import Session
+from flask_bcrypt import Bcrypt 
+import os 
+import pickle
+import h5py
+import numpy as np
+from PIL import Image
+import pdfkit
+from io import BytesIO
+from werkzeug.utils import secure_filename
+flask==2.2.2

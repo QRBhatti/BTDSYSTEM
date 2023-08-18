@@ -1,0 +1,117 @@
+{% extends "user/layout.html"%}
+
+{% block content %}
+<div class="container">
+    <meta charset="UTF-8">
+    {% include 'user/navbar.html' %}
+     
+    <div class="row d-flex justify-content-center">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+            {% with messages=get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category,message in messages %}
+            <div class="alert alert-{{category}}">
+                <strong>{{message}}</strong>
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+            <div class="card">
+                 
+                <div class="card-body">
+                     
+                    <div id="libInp"> 
+                        <div class="my-2"> 
+                            <h4 class="text-center my-2">
+                                Patient Report
+                            </h4> 
+                        </div>
+                        <div class="my-2">
+                            <label for=""><b>Name:</b>{{ patient.name}}</label>
+                            
+                        </div>
+                        <div class="my-2">
+                            <label for=""><b>Age:</b>{{ patient.age}}</label>
+                           
+                        </div>
+                        <div class="my-2">
+                            <label for=""><b>Gender:</b>{{ patient.gender }}</label>
+                            
+                        </div>
+                        <div class="my-2">
+                            <label for=""><b>Prediction:</b>{{ patient.anomaly_score}}</label>
+                             
+                        </div>
+                        <div class="my-2">
+                            <label for=""><b>Predicted Status:</b>
+                            {% if patient.anomaly_score is not none and patient.anomaly_score >= 1.0 %}
+                                <p>WF</p>
+                            {% elif patient.anomaly_score is not none and patient.anomaly_score >= 0.40 %}
+                                <p>Yes</p>
+                            {% else %}
+                                <p>No</p>
+                            {% endif %}</label>
+                             
+                        </div>
+                        <div class="my-2">
+                            <style>
+                                .my-2 {
+                                  position: relative; 
+                                  
+                                }
+                                
+                                .topright {
+                                  position: absolute;
+                                  top: 8px;
+                                  right: 16px;
+                                  font-size: 18px;
+                                }
+                                
+                                img { 
+                                  width: 80%;
+                                  height: auto;
+                                  opacity: 0.3; 
+                                }
+                                </style>
+                                 
+                        {% if patient.mri_image %}
+                        <img src="{{ patient.mri_image }}"  class="center"><br><br>
+                        {% endif %}
+                        </div>
+                    </div>
+
+                         <div id="libBtnWrap"> 
+                         <button onclick="libPrint()">Print Page</button>
+                         </div>
+                        <p id="libOp"></p>  
+                        <a href="{{ url_for('show_Patients') }}">Back</a>
+
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+<style>
+    /* print styles */
+@media print {
+
+.print-only {
+            display: block !important;
+        }
+    }
+</style>
+<script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
+<script>
+    var libInpEl = document.getElementById("libInp");
+    var libOutEl = document.getElementById("libOp");
+    var libBtnWrapEl = document.getElementById("libBtnWrap");
+    function libPrint() {
+       libOutEl.innerHTML = "Printing the document...";
+       libBtnWrapEl.style.display = "none";
+       printJS('libInp', 'html');
+    }
+ </script>
+
+{% endblock content %}
